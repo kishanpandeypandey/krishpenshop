@@ -3,16 +3,23 @@ package com.example.demo.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entitys.Users;
 import com.example.demo.helper.BCrypt;
 import com.example.demo.service.UserServices;
+
+import net.bytebuddy.asm.Advice.Return;
 
 @Controller
 public class UserController {
@@ -66,14 +73,38 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping("/singInDetails")
-	public String singInDetail(@RequestParam("emailNumber") String emailornumber , Model model) {
+	@PostMapping("/singInDetails")
+	public String singInDetail(@RequestParam("emailNumber") String emailornumber , Model model,HttpSession session) {
 		
 		 List<Users> list = userServices.getUserByEmail(emailornumber);
-		 model.addAttribute("list", list);
+		 session.setAttribute("list", list);
 		return "singin";
 		
 	}
+	@PostMapping("/singInPassword")
+	public String singisPassword(@RequestParam("password") String password,HttpSession session,Model model){
+     List<Users> list3 = (List)session.getAttribute("list");
+     String encryptedPassword = null;
+    for(Users user3 : list3) {
+    	 encryptedPassword=  user3.getPassword();
+    }
+      boolean checkuser = BCrypt.checkpw(password , encryptedPassword );
+      if(checkuser)  {
+	return "home";
+      }
+      else {
+    	  session.removeAttribute("list");
+      model.addAttribute("msg", "incorrect password");
+    	  return "singin";
+      }
+	}
+	
+	@GetMapping("/Logout")
+	public String userLogout(HttpSession session) {
+		session.removeAttribute("list");
+		return "home";
+	}
+	
 	
 }
 

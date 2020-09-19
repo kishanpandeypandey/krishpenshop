@@ -21,7 +21,7 @@ public class Users {
 	@Column(name="user_number")
 	private Long userNumber;
 	
-	@Column(name="user_email")
+	@Column(name="user_email",unique = true)
 private String useremail;
 	
 	@Column(name="user_password")

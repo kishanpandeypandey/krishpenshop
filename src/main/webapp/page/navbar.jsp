@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="com.example.demo.entitys.Users"%>
+<%@page import="java.util.List"%>
 <html lang="en">
 <head>
 <title>Bootstrap Example</title>
@@ -72,10 +74,26 @@
 		<input type="text" class="form-control home-search col-6"
 			placeholder="Search">
 
-
+<%
+    List<Users> list= (List)session.getAttribute("list");
+if(list == null){
+%>
 		<form action="Login">
 			<button type="submit" class="btn btn-default text-white ml-4 mr-4"><h1>Login/SingUp</h1></button>
 		</form>
+		<%
+		
+		}
+		
+		else
+		{%>
+		
+		<form action="Logout">
+			<button type="submit" class="btn btn-default text-white ml-4 mr-4"><h1>Logout</h1></button>
+		</form>
+		
+		<%} %>
+		
 
 <form action="/">
 			<button type="submit" class="btn btn-default text-white ml-4 mr-4"><h3>Order</h3></button>

@@ -52,12 +52,13 @@
 					%>
 
 <%
-    List<Users> list2=  (List)request.getAttribute("list");
+    List<Users> list2=  (List)session.getAttribute("list");
+
 if(list2 == null)
 {
 
 %>
-  <form action="singInDetails">
+  <form action="singInDetails" method ="post">
     <div class="form-group">
       <label for="email">Email/Mobile Number</label>
       <input type="text" class="form-control"  placeholder="Enter email or number" name="emailNumber">
@@ -75,7 +76,7 @@ else {
 
   %>
   
-   <form action="singInPassword">
+   <form action="singInPassword" method="post">
     <div class="form-group">
       <label for="email">Password</label>
       <input type="password" class="form-control"  placeholder="Enter password" name="password">
