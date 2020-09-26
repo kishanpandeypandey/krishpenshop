@@ -75,8 +75,8 @@
 			placeholder="Search">
 
 <%
-    List<Users> list= (List)session.getAttribute("list");
-if(list == null){
+    Users user= (Users)session.getAttribute("list");
+if(user == null){
 %>
 		<form action="Login">
 			<button type="submit" class="btn btn-default text-white ml-4 mr-4"><h1>Login/SingUp</h1></button>

@@ -1,3 +1,5 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -28,6 +30,10 @@
 			<div class=text-center>
 				<h1>KrishpenShop.com</h1>
 			</div>
+			<div class="alert alert-danger" role="alert">
+
+<form:errors path="user.*" />
+</div>
 			<div class="card">
 
 
@@ -67,7 +73,7 @@
 						<div class="form-group">
 							<label for="text">Email:</label> <input type="text"
 								class="form-control" id="Email" placeholder="Enter Email"
-								name="userEmail">
+								name="useremail">
 						</div>
 						<div class="form-group">
 							<label for="password">Password:</label> <input type="password"

@@ -17,7 +17,7 @@
 
 </head>
 <body>
-<%@ include file="navbar.jsp" %>
+
 <div class="container">
 <div class="center">
 </div>
@@ -28,7 +28,7 @@
 			<div class=text-center>
 				<h1>KrishpenShop.com</h1>
 			</div>
-			<div class="card">
+			<div class="card col-4">
 
 
 
@@ -52,9 +52,9 @@
 					%>
 
 <%
-    List<Users> list2=  (List)session.getAttribute("list");
+    Users user3 =  (Users)session.getAttribute("list");
 
-if(list2 == null)
+if(user3 == null)
 {
 
 %>

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,44 +54,94 @@ public class UserController {
 		return "singin";
 	}
 	
-	@RequestMapping("/saveNewUser")
-	public String saveNewUser(@RequestParam("userName")String name,
-			@RequestParam("userNumber")Long Number,
-			@RequestParam("userEmail")String email,
-			@RequestParam("userpassword")String password
-			, Model model) {
-		String EncryptedPassword = BCrypt.hashpw(password,BCrypt.gensalt(12));
-		Users user = new Users();
+	//this method make for registration using @requestParam
+	
+//	@RequestMapping("/saveNewUser")
+//	public String saveNewUser(@RequestParam("userName")String name,
+//			@RequestParam("userNumber")Long Number,
+//			@RequestParam("userEmail")String email,
+//			@RequestParam("userpassword")String password
+//			,Model model) {
+//	if(result.hasErrors()) {
+//			
+//			return "addNewUser";
+//		}
+//		
+//		String EncryptedPassword = BCrypt.hashpw(password,BCrypt.gensalt(12));
+//		Users user = new Users();
+//		
+//		user.setUserName(name);
+//      if(result.hasErrors()) {
+//			
+//			return "addNewUser";
+//		}
+//		user.setUserNumber(Number);
+//		user.setUseremail(email);
+//		user.setPassword(EncryptedPassword);
+//		user.setUserCategory("normalUser");
+//		
+//
+//	
+//		
+//		userServices.saveNewUser(user);
+//
+//		model.addAttribute("msg","successfully register");
+//		return"singin";
+//		}
+	
+	@PostMapping("/saveNewUser")
+	public String saveNewUser(@ModelAttribute("user") Users user,BindingResult result,Model model) {
+		if(result.hasErrors()) {
+			
+			return"addNewUser";
+		}
+		System.out.println(user.getUseremail());
 		
-		user.setUserName(name);
-		user.setUserNumber(Number);
-		user.setUseremail(email);
+		String password = user.getPassword();
+		String EncryptedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
 		user.setPassword(EncryptedPassword);
-		
+		user.setUserCategory("normalUser");
 		userServices.saveNewUser(user);
 		model.addAttribute("msg","successfully register");
-		return"singin";
-		
+		return "singin";
 	}
 	
 	@PostMapping("/singInDetails")
 	public String singInDetail(@RequestParam("emailNumber") String emailornumber , Model model,HttpSession session) {
-		
-		 List<Users> list = userServices.getUserByEmail(emailornumber);
-		 session.setAttribute("list", list);
+		 Users user2= userServices.getUserByEmail(emailornumber);
+		 session.setAttribute("list", user2);
 		return "singin";
 		
 	}
+	
+	@GetMapping("/singInDetails")
+		public String singInDetailHitAgain(HttpSession session) {
+		 Users user=  (Users)session.getAttribute("list");
+		 if(user == null) {
+			 return "homw";
+			 
+		 }
+		 
+		return "singin";
+	}
+	
+	
 	@PostMapping("/singInPassword")
 	public String singisPassword(@RequestParam("password") String password,HttpSession session,Model model){
-     List<Users> list3 = (List)session.getAttribute("list");
+     Users user3 = (Users)session.getAttribute("list");
      String encryptedPassword = null;
-    for(Users user3 : list3) {
     	 encryptedPassword=  user3.getPassword();
-    }
+    
       boolean checkuser = BCrypt.checkpw(password , encryptedPassword );
       if(checkuser)  {
-	return "home";
+    	  
+    	   String category= user3.getUserCategory();
+    	   if(category.equals("admin"))
+    	   {
+    		return "admin" ;  
+    		   
+    	   }
+    	  return "home";
       }
       else {
     	  session.removeAttribute("list");
@@ -99,6 +150,19 @@ public class UserController {
       }
 	}
 	
+	@GetMapping("/singInPassword")
+	public String singisPasswordHitagain(HttpSession session) {
+		Users user=  (Users)session.getAttribute("list");
+		if(user == null) {
+		return "home";
+		}else {
+		String category=  user.getUserCategory();
+		if(category.equals("admin")) {
+			return "admin";
+		}
+		return "home";
+	}
+	}
 	@GetMapping("/Logout")
 	public String userLogout(HttpSession session) {
 		session.removeAttribute("list");

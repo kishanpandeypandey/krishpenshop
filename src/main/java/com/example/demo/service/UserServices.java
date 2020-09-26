@@ -9,6 +9,6 @@ public interface UserServices {
 	
 	void saveNewUser(Users user);
 	List<Users> findAllUser();
-	List<Users> getUserByEmail(String email);
+	Users getUserByEmail(String email);
 
 }

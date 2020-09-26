@@ -21,22 +21,26 @@ public class Users {
 	@Column(name="user_number")
 	private Long userNumber;
 	
-	@Column(name="user_email",unique = true)
+	@Column(name="user_email")
 private String useremail;
 	
 	@Column(name="user_password")
 	private String password;
+	@Column(name="user_category")
+	private String UserCategory;
 	
 	public Users() {}
 
 	
 
-	public Users(String userName, Long userNumber, String useremail, String password) {
+	public Users(String userName, Long userNumber, String useremail, String password,String userCategory) {
 		super();
 		this.userName = userName;
 		this.userNumber = userNumber;
 		this.useremail = useremail;
 		this.password = password;
+		this.UserCategory = userCategory;
+		
 	}
 
 
@@ -99,6 +103,19 @@ private String useremail;
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	
+
+
+	public String getUserCategory() {
+		return UserCategory;
+	}
+
+
+
+	public void setUserCategory(String userCategory) {
+		UserCategory = userCategory;
 	}
 
 

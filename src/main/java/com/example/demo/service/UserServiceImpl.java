@@ -37,9 +37,9 @@ userRepository.save(user);
 	}
 
 	@Override
-	public List<Users> getUserByEmail(String email) {
-		 List<Users> list = userRepository.getUserByEmail(email);
-		return list;
+	public Users getUserByEmail(String email) {
+		 Users user = userRepository.getUserByEmail(email);
+		return user;
 	}
 	
 	
